@@ -12,4 +12,12 @@ export class AppService {
   getUsers() {
     return this.prisma.user.findMany();
   }
+
+  getCategories() {
+    return this.prisma.category.findMany();
+  }
+
+  getProducts() {
+    return this.prisma.product.findMany();
+  }
 }

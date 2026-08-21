@@ -14,4 +14,14 @@ export class AppController {
   getUsers() {
     return this.appService.getUsers();
   }
+
+  @Get("categories")
+  getCategories() {
+    return this.appService.getCategories();
+  }
+
+  @Get("products")
+  getProducts() {
+    return this.appService.getProducts();
+  }
 }

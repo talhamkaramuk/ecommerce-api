@@ -14,7 +14,7 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
+  id        String   @id @default(cuid(2))
   email     String   @unique
   password  String
   firstName String
@@ -23,4 +23,75 @@ model User {
   updatedAt DateTime @updatedAt
 
   @@map("users")
+}
+
+model Product {
+  id          String  @id @default(cuid(2))
+  name        String
+  slug        String  @unique
+  description String?
+  isActive    Boolean @default(true)
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  images ProductImage[]
+
+  variants ProductVariant[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([name])
+  @@map("products")
+}
+
+model Category {
+  id   String @id @default(cuid(2))
+  name String
+  slug String @unique
+
+  products Product[]
+
+  parentCategoryId String?
+  parentCategory   Category? @relation("CategoryHierarchy", fields: [parentCategoryId], references: [id], onDelete: SetNull)
+
+  subCategories Category[] @relation("CategoryHierarchy")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([parentCategoryId])
+  @@map("categories")
+}
+
+model ProductImage {
+  id       String  @id @default(cuid(2))
+  url      String
+  alt      String?
+  position Int     @default(0)
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@map("product_images")
+}
+
+model ProductVariant {
+  id   String @id @default(cuid(2))
+  name String
+  sku  String
+
+  price        Decimal  @db.Decimal(10, 2)
+  comparePrice Decimal? @db.Decimal(10, 2)
+
+  stock Int @default(0)
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@map("product_variants")
 }
