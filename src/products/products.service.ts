@@ -63,4 +63,10 @@ export class ProductsService {
 
     return { success: true, message: "Product deleted successfully" };
   }
+
+  async removeAll() {
+    await this.prisma.$transaction([this.prisma.product.deleteMany()]);
+
+    return { success: true, message: "All products deleted successfully" };
+  }
 }

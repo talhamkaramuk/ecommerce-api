@@ -42,4 +42,9 @@ export class ProductsController {
   remove(@Param("id") id: string) {
     return this.productsService.remove(id);
   }
+
+  @Delete()
+  removeAll() {
+    return this.productsService.removeAll();
+  }
 }

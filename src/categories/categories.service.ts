@@ -67,4 +67,10 @@ export class CategoriesService {
 
     return { success: true, message: "Category deleted successfully" };
   }
+
+  async removeAll() {
+    await this.prisma.$transaction([this.prisma.category.deleteMany()]);
+
+    return { success: true, message: "All categories deleted successfully" };
+  }
 }
